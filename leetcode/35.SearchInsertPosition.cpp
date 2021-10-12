@@ -64,16 +64,15 @@ void setIO(string name = "")
 	}
 }
 
-class Solution
-{
+class Solution {
 public:
     int searchInsert(vector<int>& nums, int target) {
         int l = 0, r = nums.size(), m = 0;
-        while (l < r)
+        while (1)
         {
             m = l + (r - l) / 2;
-            if (nums[m] == target)
-                return m;
+            if (l == r || nums[m] == target)
+                break;
 
             if (nums[m] > target)
                 r = m;
@@ -86,6 +85,5 @@ public:
 
 int main()
 {
-	// In progress
 	return 0;
 }
