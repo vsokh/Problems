@@ -1,1 +1,9 @@
-*/a.out
+*
+!leetcode
+!pramp
+!usaco
+
+!leetcode/*.[ch]pp
+!pramp/*.[ch]pp
+!usaco/*.[ch]pp
+
