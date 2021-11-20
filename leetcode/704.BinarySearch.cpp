@@ -1,84 +1,32 @@
-#include <bits/stdc++.h>
+
+#include <iostream>
+#include <vector>
+#include <unordered_map>
 
 using namespace std;
 
-template<typename T>
-struct number_iterator : std::iterator<random_access_iterator_tag, T> {
-	T v;
-	number_iterator(T _v) : v(_v) {}
-	operator T&(){return v;}
-	T operator *() const {return v;}
-};
+using vi = vector<int>;
 
-template<typename T>
-struct number_range {
-	T b,e;
-	number_range(T b, T e):b(b),e(e){}
-	number_iterator<T> begin(){return b;}
-	number_iterator<T> end(){return e;}
-};
-
-template<typename T> number_range<T> range(T e) {return number_range<T>(0, e);}
-template<typename T> number_range<T> range(T b, T e) {return number_range<T>(b, e);}
-
-template<typename... Args>
-auto Func(Args... args)
+class Solution
 {
-	return (args + ...);
-}
-
-void err(istream_iterator<string> it) {}
-
-template<typename T, typename... Args>
-void err(istream_iterator<string> it, T a, Args... args)
-{
-	cerr << *it << " = " << a << endl;
-	err(++it, args...);
-}
-
-#define error(args...) { string _s = #args; replace(_s.begin(), _s.end(), ',', ' '); stringstream _ss(_s); istream_iterator<string> _it(_ss); err(_it, args); }
-
-#define e9 1e9
-#define all(x) begin(x), end(x)
-#define sz(x) (ll)(x).size()
-#define nl "\n"
-
-#define f first
-#define s second
-#define mp make_pair
-#define pb push_back
-#define pf push_front
-
-#define vi vector<int>
-#define li list<int>
-#define si set<int>
-#define pi pair<int, int>
-
-void setIO(string name = "")
-{
-	cin.tie(0)->sync_with_stdio(0);
-	if (name.size()) {
-		freopen((name+".in").c_str(), "r", stdin);
-		freopen((name+".out").c_str(), "w", stdout);
-	}
-}
-
-class Solution {
 public:
-	int search(vector<int>& nums, int start, int end, int target)
-	{
-		int mid = (start + end) / 2;
-		if (nums[mid] == target)
-			return mid;
-		if (mid == start || mid == end)
-			return -1;
-		return nums[mid] < target
-			? search(nums, mid, end, target)
-			: search(nums, start, mid, target);
-	}
+     int search(vector<int>& nums, int target)
+     {
+         int left = 0, right = nums.size();
+         while (left < right)
+         {
+             int mid = left + (right - left) / 2;
+             if (nums[mid] == target)
+                 return mid;
 
-    int search(vector<int>& nums, int target)
-	{ return search(nums, 0, nums.size(), target); }
+             if (nums[mid] > target)
+                 right = mid;
+             else
+                 left = mid + 1;
+
+         }
+         return -1;
+     }
 };
 
 int main()
