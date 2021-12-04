@@ -69,28 +69,6 @@ class Solution
 public:
     void moveZeroes(vector<int>& nums)
 	{
-		size_t zeroes = 0;
-		for (const auto& i : nums)
-		{
-			zeroes += (i == 0);
-		}
-
-		vector<int> ans;
-		for (const auto& i : nums)
-		{
-			if (i != 0)
-				ans.push_back(i);
-		}
-
-		while (zeroes--)
-		{
-			ans.push_back(0);
-		}
-
-		for (size_t i = 0; i < nums.size(); ++i)
-		{
-			nums[i] = ans[i];
-		}
 	}
 };
 

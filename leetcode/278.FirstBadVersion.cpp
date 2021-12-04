@@ -73,21 +73,17 @@ int isBadVersion(int n)
 class Solution {
 public:
     int firstBadVersion(int n) {
-        unsigned long long l = 0, r = n, b = -1;
-        while (1)
-        {
-			unsigned long long m = (l + r) / 2;
+		int l = 0, r = n;
+		int m = l + (r - l) / 2;
+		while (l < r)
+		{
 			if (isBadVersion(m))
-			{
-				if (l==r) { return m; }
-				r = b = m;
-			}
+				r = m;
 			else
-			{
-				l = m+1;
-			}
-        }
-		return b;
+				l = m + 1;
+			m = l + (r - l) / 2;
+		}
+		return m;
     }
 };
 
