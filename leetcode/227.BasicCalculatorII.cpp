@@ -56,7 +56,8 @@ public:
         return tokens;
     }
 
-    vector<pair<Token, int>> toRPN(const vector<pair<Token, int>>& tokens)
+    vector<pair<Token, int>>
+        toRPN(const vector<pair<Token, int>>& tokens)
     {
         vector<pair<Token, int>> output;
         vector<Token> opStack;
@@ -90,9 +91,10 @@ public:
                         }
                         auto o2 = opStack.back();
                         while (!opStack.empty() &&
-                                ((isLow(o1) && isHigh(o2)) ||
-                                 (isLow(o1) && isLow(o2))  ||
-                                 (isHigh(o1) && isHigh(o2))))
+                                ((isLow(o1) && isHigh(o2))  ||
+                                 (isLow(o1) && isLow(o2))   ||
+                                 (isHigh(o1) && isHigh(o2)) ||
+                                 (isLow(o1) && isLow(o2))))
                         {
                             output.push_back({o2, 0});
                             opStack.pop_back();
@@ -105,9 +107,7 @@ public:
                     }
                  });
         for (auto op = rbegin(opStack); op != rend(opStack); ++op)
-        {
             output.push_back({*op, 0});
-        }
         for (auto t: output)
             cout << t << endl;
         return output;
