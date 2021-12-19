@@ -90,9 +90,9 @@ public:
                         }
                         auto o2 = opStack.back();
                         while (!opStack.empty() &&
-                                ((isLow(o2) && isHigh(o1)) ||
-                                 (isLow(o2) && isLow(o1))  ||
-                                 (isHigh(o2) && isHigh(o1))))
+                                ((isLow(o1) && isHigh(o2)) ||
+                                 (isLow(o1) && isLow(o2))  ||
+                                 (isHigh(o1) && isHigh(o2))))
                         {
                             output.push_back({o2, 0});
                             opStack.pop_back();
@@ -139,6 +139,7 @@ public:
 int main()
 {
     string s = "3+2*2";
+    /* string s = " 3+5 / 2 "; */
     Solution sol; sol.calculate(s);
     return 0;
 }
