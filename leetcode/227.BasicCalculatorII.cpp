@@ -15,44 +15,52 @@ public:
     vector<pair<Token, int>>
         toTokens(string s)
     {
-        int num = -1;
+        long long num = -1;
         vector<pair<Token, int>> tokens;
 
-        auto addNumToken = [&num, &tokens]()
+        auto addNumToken =
+            [&num, &tokens]()
         {
-            if (num != -1)
-            {
-                tokens.push_back({Token::Num, num});
-            }
+            tokens.push_back({Token::Num, num});
             num = -1;
         };
 
-        auto addOpToken = [&addNumToken, &tokens](const Token& token)
+        auto addOpToken =
+            [&tokens](const Token& token)
         {
-            addNumToken();
-            tokens.push_back({token, 0});
+                tokens.push_back({token, 0});
         };
 
-        for_each(s.begin(),
-                 s.end(),
-                 [&](const auto& ch)
-                 {
-                     if (ch == ' ')
-                     {
-                         addNumToken();
-                         return;
-                     }
+        auto isNum =
+            [](const char& ch)
+        {
+                return '0' <= ch && ch <= '9';
+        };
 
-                     if ('0' <= ch && ch <= '9')
-                     {
-                         num = (num == -1 ? 0 : num) * 10 + ch - 48;
-                         return;
-                     }
+        auto it = s.begin();
+        while (it != s.end())
+        {
+            auto ch = *it;
+            while (isNum(ch))
+            {
+                num = (num == -1 ? 0 : num) * 10 + ch - 48;
 
-                     if      (ch == '+') addOpToken(Token::Add);
-                     else if (ch == '-') addOpToken(Token::Sub);
-                     else if (ch == '/') addOpToken(Token::Div);
-                     else if (ch == '*') addOpToken(Token::Mul);});
+                if (++it == s.end())
+                    break;
+
+                ch = *it;
+            }
+
+            if (num != -1) addNumToken();
+
+            if      (ch == '+') addOpToken(Token::Add);
+            else if (ch == '-') addOpToken(Token::Sub);
+            else if (ch == '/') addOpToken(Token::Div);
+            else if (ch == '*') addOpToken(Token::Mul);
+
+            if (it != s.end()) ++it;
+        }
+
         return tokens;
     }
 
@@ -108,18 +116,40 @@ public:
                  });
         for (auto op = rbegin(opStack); op != rend(opStack); ++op)
             output.push_back({*op, 0});
-        for (auto t: output)
-            cout << t << endl;
         return output;
+    }
+
+    int evalRPN(vector<pair<Token, int>> rpn)
+    {
+        vector<int> stack;
+        for (auto t : rpn)
+        {
+            if (t.first == Token::Num)
+            {
+                stack.push_back(t.second);
+            }
+            else
+            {
+                int n1 = stack.back(); stack.pop_back(); // denominator
+                int n2 = stack.back(); stack.pop_back(); // numerator
+                int result = 0;
+                if      (t.first == Token::Add) result = n2 + n1;
+                else if (t.first == Token::Sub) result = n2 - n1;
+                else if (t.first == Token::Div) result = n2 / n1;
+                else if (t.first == Token::Mul) result = n2 * n1;
+
+                stack.push_back(result);
+            }
+        }
+        return stack.back();
     }
 
     int calculate(string s)
     {
         auto tokens = toTokens(s);
         auto rpn = toRPN(tokens);
-        /* auto result = evalRPN(rpn); */
-
-        return 0;
+        auto result = evalRPN(rpn);
+        return result;
     }
 
     friend std::ostream& operator<<(std::ostream& o, const pair<Token, int>& t)
@@ -135,11 +165,14 @@ public:
     }
 };
 
-
 int main()
 {
-    string s = "3+2*2";
+    /* string s = "3+2*2"; */
     /* string s = " 3+5 / 2 "; */
-    Solution sol; sol.calculate(s);
+    /* string s = " 3/2 "; */
+    string s = "2147483647";
+    Solution sol;
+    auto r = sol.calculate(s);
+    cout << r << endl;
     return 0;
 }
