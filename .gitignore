@@ -2,8 +2,10 @@
 !leetcode
 !pramp
 !usaco
+!codeforces
 
 !leetcode/*.[ch]pp
 !pramp/*.[ch]pp
 !usaco/*.[ch]pp
+!codeforces/*.[ch]pp
 
