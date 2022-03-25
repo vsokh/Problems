@@ -1,10 +1,12 @@
 
+#include <__nullptr>
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
 struct TreeNode {
+
     int val;
     TreeNode *left;
     TreeNode *right;
@@ -15,55 +17,36 @@ struct TreeNode {
 
 class Solution {
 public:
-    void traverse(TreeNode* node)
-    {
-        if (node==nullptr)
+    void dfs(TreeNode* n) {
+        if (!n)
             return;
 
-        cout << "(";
-        traverse(node->left);
-        cout << " " << node->val << " ";
-        traverse(node->right);
-        cout << ")";
+        dfs(n->left);
+        cout << n->val << " ";
+        dfs(n->right);
     }
 
-    void merge(TreeNode* n1, TreeNode* n2, TreeNode* n3)
-    {
-        if (!n1 && !n2)
+    void dfs(TreeNode* n1, TreeNode* n2) {
+        if (!n1 || !n2)
             return;
-
-        if (!n2)
-            n3->val = n1->val;
-        else if (!n1)
-            n3->val = n2->val;
-        else
-            n3->val = n1->val+n2->val;
 
         if (n1 && n2)
-        {
-            if (n1->left || n2->left)
-            {
-                n3->left = new TreeNode{};
-                merge(n1->left, n2->left, n3->left);
-            }
+            n1->val += n2->val;
 
-            if (n1->right || n2->right)
-            {
-                n3->right = new TreeNode{};
-                merge(n1->right, n2->right, n3->right);
-            }
-        }
+        if (!n1->left)
+            n1->left = n2->left;
+        else
+            dfs(n1->left, n2->left);
 
+        if (!n1->right)
+            n1->right = n2->right;
+        else
+            dfs(n1->right, n2->right);
     }
 
-    TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2)
-    {
-        if (!root1 && !root2)
-            return nullptr;
-
-        TreeNode* root3 = new TreeNode{};
-        merge(root1, root2, root3);
-        return root3;
+    TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+        dfs(root1, root2);
+        return root1;
     }
 };
 
