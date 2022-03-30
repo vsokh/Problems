@@ -8,20 +8,14 @@ class Solution
 public:
     void rotate(vector<int>& nums, int k)
     {
-		int kk = k % nums.size();
-		vector<int> v;
-		for (int i = nums.size() - kk; i < nums.size(); ++i)
-		{
-			v.push_back(nums[i]);
-		}
-		for (int i = 0; i < nums.size() - kk; ++i)
-		{
-			v.push_back(nums[i]);
-		}
-		for (int i = 0; i < nums.size(); ++i)
-		{
-			nums[i] = v[i];
-		}
+        int sz = nums.size();
+        int n = k%sz;
+        vector<int> tmp(sz);
+        for (int i = 0; i < n; ++i)
+            tmp[i] = nums[sz-n+i];
+        for (int i = 0; i < sz-n; ++i)
+            tmp[n+i] = nums[i];
+        nums = tmp;
     }
 };
 
@@ -36,4 +30,3 @@ int main()
 
     return 0;
 }
-

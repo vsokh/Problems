@@ -5,23 +5,23 @@ using namespace std;
 
 class Solution {
 public:
-    void dfs(vector<vector<int>>& image, int sr, int sc, int clr, int newColor)
-    {
-        if (sr < 0 || sr >= image.size() || sc < 0 || sc >= image[0].size())
+    void floodFill(vector<vector<int>>& image, int i, int j, int newColor, int oldColor) {
+        if (i >= image.size() || j >= image[0].size())
             return;
-        if (image[sr][sc] != clr)
+        if (image[i][j] != oldColor)
+            return;
+        if (image[i][j] == newColor)
             return;
 
-        image[sr][sc]=newColor;
-        floodFill(image, sr-1, sc, clr, newColor);
-        floodFill(image, sr, sc-1, clr, newColor);
-        floodFill(image, sr+1, sc, clr, newColor);
-        floodFill(image, sr, sc+1, clr, newColor);
+        image[i][j] = newColor;
+        floodFill(image, i, j + 1, newColor, oldColor);
+        floodFill(image, i, j - 1, newColor, oldColor);
+        floodFill(image, i - 1, j, newColor, oldColor);
+        floodFill(image, i + 1, j, newColor, oldColor);
     }
 
     vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
-        if (image[sr][sc]!=newColor)
-            dfs(image, sr, sc, image[sr][sc], newColor);
+        floodFill(image, sr, sc, newColor, image[sr][sc]);
         return image;
     }
 };

@@ -8,18 +8,17 @@ using vec = vector<int>;
 
 class Solution
 {
-
 public:
     int maxSubArray(vector<int>& nums)
-	{
-		vector<int> dp(nums.size()); dp[0] = nums[0];
-		int sum = nums[0];
-		for (int i = 1; i < nums.size(); ++i)
-		{
-			dp[i] = nums[i] + (dp[i-1] > 0 ? dp[i-1] : 0);
-			sum = max(sum, dp[i]);
-		}
-		return sum;
+    {
+        int tmpSum = nums[0];
+        int sum = nums[0];
+        for (int i = 1; i < nums.size(); ++i)
+        {
+            tmpSum = std::max(nums[i], tmpSum + nums[i]);
+            sum = std::max(tmpSum, sum);
+        }
+        return sum;
     }
 };
 

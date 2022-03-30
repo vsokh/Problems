@@ -6,28 +6,25 @@ using namespace std;
 class Solution {
 public:
     vector<int> sortedSquares(vector<int>& nums) {
-		for (int& i : nums)
-			i = i < 0 ? -i : i;
-		int m = 0;
-		for (int i = 0; i < nums.size(); ++i)
-		{
-			if (nums[m] > nums[i])
-				m = i;
-		}
-		vector<int> A; A.push_back(nums[m]);
-		int l = m - 1, r = m + 1;
-		while (l >= 0 && r < nums.size())
-		{
-			if (nums[l] < nums[r])
-				A.push_back(nums[l--]);
-			else
-				A.push_back(nums[r++]);
-		}
-		while (l >= 0)
-			A.push_back(nums[l--]);
-		while (r < nums.size())
-			A.push_back(nums[r++]);
-		return A;
+        vector<int> result(nums.size());
+        int left = 0;
+        int right = nums.size()-1;
+        int idx = nums.size()-1;
+        while (left <= right)
+        {
+            if (abs(nums[left]) > abs(nums[right]))
+            {
+                result[idx]=nums[left]*nums[left];
+                ++left;
+            }
+            else
+            {
+                result[idx]=nums[right]*nums[right];
+                --right;
+            }
+            --idx;
+        }
+        return result;
     }
 };
 

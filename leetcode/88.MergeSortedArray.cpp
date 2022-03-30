@@ -7,22 +7,25 @@ using namespace std;
 
 class Solution {
 public:
-    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
-		vector<int> res;
-		int i = 0; int j = 0;
-		while (i < m && j < n)
-		{
-			if (nums1[i] < nums2[j])
-				res.push_back(nums1[i++]);
-			else
-				res.push_back(nums2[j++]);
-		}
-		while (i < m)
-			res.push_back(nums1[i++]);
-		while (j < n)
-			res.push_back(nums2[j++]);
-		for (int i = 0; i < m + n; ++i)
-			nums1[i] = res[i];
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n)
+    {
+        vector<int> v(m+n);
+        int i, j, k;
+        i = j = k = 0;
+        for (; i < m && j < n; ++k) {
+            if (nums1[i] < nums2[j]) {
+                v[k] = nums1[i++];
+            } else {
+                v[k] = nums2[j++];
+            }
+        }
+        for (; i < m; ++i, ++k) {
+            v[k] = nums1[i];
+        }
+        for (; j < n; ++j, ++k) {
+            v[k] = nums2[j];
+        }
+        nums1 = v;
     }
 };
 

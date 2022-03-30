@@ -18,17 +18,13 @@ class Solution
 public:
     bool hasCycle(ListNode *head)
     {
-        auto slow = head;
-        auto fast = head->next;
-        while (slow != nullptr && fast != nullptr)
+        unordered_set<ListNode*> set;
+        for (auto p = head; p != NULL; p = p->next)
         {
-            cout << "slow: " << slow->val << endl;
-            cout << "fast: " << fast->val << endl;
-            if (slow == fast)
+            if (set.find(p) != set.end())
                 return true;
 
-            slow = slow->next;
-            fast = fast->next->next;
+            set.insert(p);
         }
         return false;
     }

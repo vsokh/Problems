@@ -9,15 +9,19 @@ class Solution
 public:
     vector<int> twoSum(vector<int>& nums, int target)
 	{
-		unordered_map<int, int> map;
-		// O(n)
-		for (int i = 0; i < nums.size(); ++i)
-		{
-			if (map.find(target-nums[i]) != map.end())
-				return {map[target-nums[i]], i};
-			map[nums[i]]=i;
-		}
-		return {};
+        unordered_map<int, int> map;
+        for (int i = 0; i < nums.size(); ++i) {
+            map.insert({nums[i], i});
+        }
+
+        for (int i = 0; i < nums.size(); ++i) {
+            int num = target-nums[i];
+            if (auto it = map.find(num);
+                     it != map.end() && it->second != i) {
+                return {i, it->second};
+            }
+        }
+        return {-1, -1};
 	}
 };
 

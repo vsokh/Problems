@@ -5,32 +5,36 @@
 
 using namespace std;
 
-class Solution
-{
-
+class Solution {
 public:
+    int binSearch(vector<int>& numbers, int target, int idx)
+    {
+        int l = 0;
+        int r = numbers.size();
+        while (l < r)
+        {
+            int mid = l + (r - l) / 2;
+            if (numbers[mid] == target && mid != idx)
+                return mid;
+            if (numbers[mid] < target)
+                l = mid + 1;
+            else
+                r = mid;
+        }
+        return -1;
+    }
+
     vector<int> twoSum(vector<int>& numbers, int target) {
-        unordered_map<int, int> um;
+        vector<int> result;
         for (int i = 0; i < numbers.size(); ++i)
         {
-            if (um[numbers[i]] && target == numbers[um[numbers[i]]] + numbers[i])
-            {
-                return {um[numbers[i]], i+1};
-            }
-
-            um[numbers[i]]=i+1;
-        }
-
-        vector<int> result;
-        for (auto& i : numbers)
-        {
-            if (um[target-i])
-            {
-                result = {um[i], um[target-i]};
+            int j = binSearch(numbers, target-numbers[i], i);
+            if (j != -1) {
+                if (i > j) swap(i, j);
+                result = {i+1, j+1};
                 break;
             }
         }
-
         return result;
     }
 };
