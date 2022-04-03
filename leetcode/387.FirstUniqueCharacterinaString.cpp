@@ -8,21 +8,18 @@ class Solution {
 public:
     int firstUniqChar(string s) {
         unordered_map<char, int> map;
-        for (int i = 0; i < s.size(); ++i)
-        {
-            if (map.find(s[i]) != map.end())
-                map[s[i]]=-1;
-            else
-                map[s[i]]=i;
+
+        for (char& ch : s) {
+            ++map[ch];
         }
 
-        int result = -1;
-        for (auto& [ch, idx] : map)
-        {
-            if (idx != -1)
-                result = (result == -1 || result > idx) ? idx : result;
+        for (int i = 0; i < s.size(); ++i) {
+            int n = map[s[i]];
+            if (n < 2) {
+                return i;
+            }
         }
-        return result;
+        return -1;
     }
 };
 
