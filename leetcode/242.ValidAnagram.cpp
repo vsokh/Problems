@@ -7,16 +7,19 @@ using namespace std;
 
 class Solution {
 public:
-    bool isAnagram(string s, string t)
-    {
-        unordered_map<char, int> map;
-        for (char& ch : s)
+    bool isAnagram(string s, string t) {
+        if (s.size() != t.size()) return false;
+
+        unordered_map<int, int> map;
+        for (auto ch : s) {
             ++map[ch];
-        for (char& ch : t)
-            --map[ch];
-        for (auto& [ch, i] : map)
-            if (i != 0)
+        }
+
+        for (auto ch : t) {
+            if (map[ch]-- < 1) {
                 return false;
+            }
+        }
         return true;
     }
 };
