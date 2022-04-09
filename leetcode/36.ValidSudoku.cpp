@@ -1,62 +1,108 @@
 #include <iostream>
 #include <vector>
-#include <unordered_map>
+#include <unordered_set>
 
 using namespace std;
 
 class Solution {
 public:
-    bool isValid3x3(vector<vector<char>>& board, vector<char>& v, int r, int c, int er, int ec)
-    {
-		if (r < 0 || r >= er || c < 0 || c >= ec)
-			return false;
+	bool checkRows(vector<vector<char>>& board) {
+		unordered_set<char> set;
+		int rows = board.size();
+		int columns = board[0].size();
+		for (int i = 0; i < rows; ++i) {
+			for (int j = 0; j < columns; ++j) {
+				auto& num = board[i][j];
+				if (num == '.') continue;
 
-		auto& elem = board[r][c];
-		if (elem != '.' && elem != ',' && v[elem - 48] != 0)
-			return false;
-
-		v[elem - 48] = 1;
-
-		return true && isValid3x3(board, v, r - 1, c, er, ec)
-					&& isValid3x3(board, v, r, c - 1, er, ec)
-					&& isValid3x3(board, v, r + 1, c, er, ec)
-					&& isValid3x3(board, v, r, c + 1, er, ec);
-    }
-
-    bool isValidSudoku(vector<vector<char>>& board)
-	{
-		int n = 9;
-		unordered_set<int> set;
-        for (int i = 0; i < n; ++i)
-        {
-			for (int j = 0; j < n; ++j)
-			{
-				for (int k = 0; k < 9; ++k)
-				{
-					if (board[i][j] != '.' && set.find(board[i][j]) != set.end())
-						return false;
-					set.insert(board[i][j]);
+				if (auto it = set.find(num);
+						it != set.end()) {
+					return false;
+				} else {
+					set.insert(num);
 				}
-				set.clear();
 			}
-        }
-        return true;
-    }
+			set.clear();
+		}
+		return true;
+	}
+
+	bool checkColumns(vector<vector<char>>& board) {
+		unordered_set<char> set;
+		int rows = board.size();
+		int columns = board[0].size();
+		for (int i = 0; i < columns; ++i) {
+			for (int j = 0; j < rows; ++j) {
+				auto& num = board[j][i];
+				if (num == '.') {
+					continue;
+				}
+
+				if (auto it = set.find(num);
+						 it != set.end()) {
+					return false;
+				} else {
+					set.insert(num);
+				}
+			}
+			set.clear();
+		}
+		return true;
+	}
+	bool check3x3(vector<vector<char>>& board, int s, int e) {
+		unordered_set<char> set;
+		for (int i = s; i < s + 3; ++i) {
+			for (int j = e; j < e + 3; ++j) {
+				char num = board[i][j];
+				if (num == '.') {
+					continue;
+				}
+
+				auto it = set.find(num);
+				if (it != set.end()) {
+					return false;
+				} else {
+					set.insert(num);
+				}
+			}
+		}
+		return true;
+	}
+
+	bool checkEach3x3(vector<vector<char>>& board) {
+		int rows = board.size();
+		int columns = board[0].size();
+		for (int i = 0; i < rows; i += 3) {
+			for (int j = 0; j < columns; j += 3) {
+				if (!check3x3(board, i, j)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	bool isValidSudoku(vector<vector<char>>& board) {
+		bool r = checkRows(board);
+		bool c = checkColumns(board);
+		bool x = checkEach3x3(board);
+		return r && c && x;
+	}
 };
 
 int main() {
 	Solution s;
 	vector<vector<char>> board =
-		{{'5','3','.','.','7','.','.','.','.'}
-		,{'6','.','.','1','9','5','.','.','.'}
-		,{'.','9','8','.','.','.','.','6','.'}
-		,{'8','.','.','.','6','.','.','.','3'}
-		,{'4','.','.','8','.','3','.','.','1'}
-		,{'7','.','.','.','2','.','.','.','6'}
-		,{'.','6','.','.','.','.','2','8','.'}
-		,{'.','.','.','4','1','9','.','.','5'}
-		,{'.','.','.','.','8','.','.','7','9'}};
-
+	{{'.','.','.','.','5','.','.','1','.'},
+	 {'.','4','.','3','.','.','.','.','.'},
+	 {'.','.','.','.','.','3','.','.','1'},
+	 {'8','.','.','.','.','.','.','2','.'},
+	 {'.','.','2','.','7','.','.','.','.'},
+	 {'.','1','5','.','.','.','.','.','.'},
+	 {'.','.','.','.','.','2','.','.','.'},
+	 {'.','2','.','9','.','.','.','.','.'},
+	 {'.','.','4','.','.','.','.','.','.'}};
 	cout << s.isValidSudoku(board) << endl;
+
 	return 0;
 }

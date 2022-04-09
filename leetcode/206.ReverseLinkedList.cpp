@@ -10,32 +10,19 @@ struct ListNode {
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+
 class Solution {
 public:
-    ListNode* reverseList(ListNode* head)
-    {
-        if (!head)
-            return nullptr;
-
-        size_t sz = 0;
-        for (auto* n = head; n != nullptr; n=n->next)
-        {
-            ++sz;
+    ListNode* reverseList(ListNode* head) {
+        ListNode* prev = nullptr;
+        ListNode* node = head;
+        while (node) {
+            auto next = node->next;
+            node->next = prev;
+            prev = node;
+            node = next;
         }
-
-        vector<ListNode*> v(sz); int i = 0;
-        for (ListNode* n = head; n != nullptr; n=n->next)
-        {
-            v[i++] = new ListNode(n->val);
-        }
-
-        reverse(v.begin(), v.end());
-        for (int i = 1; i < sz; ++i)
-        {
-            v[i-1]->next = v[i];
-        }
-
-        return v[0];
+        return prev;
     }
 };
 
