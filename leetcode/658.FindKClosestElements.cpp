@@ -1,113 +1,74 @@
-#include <bits/stdc++.h>
+#include <vector>
+#include <iostream>
+#include <cmath>
 
 using namespace std;
 
-#define all(x) begin(x), end(x)
-#define sz(x) (ll)(x).size()
-#define nl "\n"
+class Solution
+{
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        int i = 0;
+        int j = 0;
+        int lastD = abs(arr[i]-x);
+        for (;i < arr.size(); ++i) {
+            int d = abs(arr[i]-x);
+            if (lastD > d) {
+                lastD = d;
+                j = i;
+            }
+        }
 
-#define f first
-#define s second
-#define mp make_pair
-#define pb push_back
-#define pf push_front
+        vector<int> result;
+        int l = j;
+        int r = j+1;
+        while (k--) {
+            if (l < 0 && r >= arr.size()) {
+                break;
+            }
 
-#define vi vector<int>
-#define li list<int>
-#define si set<int>
-#define pi pair<int>
+            if (l < 0) {
+                result.push_back(arr[r]);
+                ++r;
+                continue;
+            }
 
-#define all(x) begin(x), end(x)
-#define sz(x) (ll)(x).size()
-#define nl "\n"
+            if (r >= arr.size()) {
+                result.push_back(arr[l]);
+                --l;
+                continue;
+            }
 
-#define f first
-#define s second
-#define mp make_pair
-#define pb push_back
-#define pf push_front
-
-#define vi vector<int>
-#define li list<int>
-#define si set<int>
-#define pi pair<int>
-
-/* class Solution { */
-/* 	public: */
-/* 		vi findClosestElements(vi& arr, int k, int x) { */
-/* 			vi B; li L; */
-/* 			auto LB = lower_bound(all(arr), x); */
-/* 			if (LB == arr.end()) */
-/* 			{ */
-/* 				auto it = arr.rbegin(); */
-/* 				for (int i = 0; i<k; ++i) */
-/* 				{ L.pf(*it++); } */
-/* 			} */
-/* 			else */
-/* 			{ */
-/* 				int p1 = LB-arr.begin(); */
-/* 				int p2 = LB-arr.begin(); */
-/* 				L.pb(*LB); p1--; p2++; */
-/* 				for (int i = 0; i<k-1; ++i) */
-/* 				{ */
-/* 					if (p2 >= arr.size()) { L.pf(arr[p1--]); continue; } */
-/* 					if (p1  < 0)          { L.pb(arr[p2++]); continue; } */
-
-/* 					if (abs(arr[p1]-x)  < abs(arr[p2]-x) || */
-/* 					   (abs(arr[p1]-x) == abs(arr[p2]-x) && arr[p1] < arr[p2])) */
-/* 						L.pf(arr[p1--]); */
-/* 					else */
-/* 						L.pb(arr[p2++]); */
-/* 				} */
-/* 			} */
-/* 			for (int i : L) */
-/* 			{ B.push_back(i); } */
-/* 			return B; */
-/* 		} */
-/* }; */
-
-class Solution {
-	public:
-		vector<int> findClosestElements(vector<int>& arr, int k, int x) {
-			vector<int> B; list<int> L;
-			auto LB = lower_bound(arr.begin(), arr.end(), x);
-			if (LB == arr.end())
-			{
-				auto it = arr.rbegin();
-				for (int i = 0; i<k; ++i)
-				{ L.push_front(*it++); }
-			}
-			else
-			{
-				int p1 = LB-arr.begin()-1;
-				int p2 = p1+1;
-				for (int i = 0; i<k; ++i)
-				{
-					if (p2 >= arr.size()) { L.push_front(arr[p1--]); continue; }
-					if (p1  < 0)          { L.push_back(arr[p2++]);  continue; }
-
-					if (abs(arr[p1]-x)  < abs(arr[p2]-x) ||
-					   (abs(arr[p1]-x) == abs(arr[p2]-x) && arr[p1] < arr[p2]))
-						L.push_front(arr[p1--]);
-					else
-						L.push_back(arr[p2++]);
-				}
-			}
-			for (int i : L)
-			{ B.push_back(i); }
-			return B;
-		}
+            if (abs(arr[l]-x) == abs(arr[r]-x)) {
+                if (arr[l] < arr[r]) {
+                    result.push_back(arr[l]);
+                    --l;
+                } else {
+                    result.push_back(arr[r]);
+                    ++r;
+                }
+            } else if (abs(arr[l]-x) < abs(arr[r]-x)) {
+                result.push_back(arr[l]);
+                --l;
+            } else {
+                result.push_back(arr[r]);
+                ++r;
+            }
+        }
+        sort(result.begin(), result.end());
+        return result;
+    }
 };
 
 int main()
 {
 	Solution s;
-	vi arr = {-70, 1, 4, 5, 10};
-	/* vi arr = {1, 2, 3, 4, 5}; */
-	/* vi arr = {1}; */
-	/* vi arr = {0,0,1,2,3,3,4,7,7,8}; */
-	int k = 4, x = 15;
-	vi v = s.findClosestElements(arr, k, x);
+	vector<int> arr = {-70, 1, 4, 5, 10};
+	/* vector<int> arr = {1, 2, 4, 6, 8}; */
+	/* vector<int> arr = {1}; */
+	/* vector<int> arr = {0,0,1,2,3,3,4,7,7,8}; */
+	int k = 4, x = -68;
+	auto v = s.findClosestElements(arr, k, x);
 
 	for (int i : v)
 	{ cout << i << " "; }

@@ -7,26 +7,23 @@ class Solution
 {
 public:
     int searchInsert(vector<int>& nums, int target) {
-        int left = 0;
-        int right = nums.size();
-        int mid = left + (right - left) / 2;
-		while (left < right)
-		{
-            if (nums[mid] == target)
-            {
-                return mid;
+        int l = 0;
+        int r = nums.size()-1;
+        int m = l + (r - l) / 2;
+
+        while (l <= r) {
+            if (nums[m] == target) {
+                return m;
             }
-            if (nums[mid] < target)
-            {
-                left = mid + 1;
+
+            if (nums[m] < target) {
+                l = m + 1;
+            } else {
+                r = m - 1;
             }
-            else
-            {
-                right = mid;
-            }
-            mid = left + (right - left) / 2;
-		}
-		return mid;
+            m = l + (r - l) / 2;
+        }
+        return m;
     }
 };
 
