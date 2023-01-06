@@ -1,6 +1,8 @@
 #include <iostream>
+#include <iterator>
 #include <vector>
 #include <unordered_set>
+#include <unordered_map>
 #include <algorithm>
 
 using namespace std;
@@ -8,50 +10,29 @@ using namespace std;
 class Solution
 {
 public:
-    int deleteAndEarn(vector<int>& nums) {
-        unordered_set<int> us(nums.begin(), nums.end());
-        int maxPts = 0;
-        for (auto e : nums)
-        {
-            int currPts = 0;
-            deleteAndEarn(e, us, currPts);
-            maxPts = max(currPts, maxPts);
+    int deleteAndEarn(vector<int>& nums, vector<int>& mem, int i) {
+        vector<int> mem(nums.size());
+        if (i >= nums.size()) {
+            return 0;
         }
-        return maxPts;
+        if (mem[i]) {
+            return mem[i];
+        }
+        mem[i] = nums[i] + deleteAndEarn(nums, mem, i);
+        return mem[i];
     }
 
-    void deleteAndEarn(int num, unordered_set<int> us, int& currPts)
-    {
-        currPts += num;
+    int deleteAndEarn(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
 
-        for (auto e : us)
-        {
-            std::cout << e <<",";
+        int maxEarn = INT_MIN;
+        vector<int> mem(nums.size());
+        for (int i = 0; i < nums.size(); ++i) {
+            int currEarn = deleteAndEarn(nums, mem, i);
+            maxEarn = max(maxEarn, currEarn);
         }
 
-        us.erase(std::remove_if(
-                    us.begin(),
-                    us.end(),
-                    [&num](int i)
-                    {
-                        return i == num || i == num-1 || i == num+1;
-                    }),
-                    us.end());
-
-        /* us.erase(num); */
-        /* us.erase(num+1); */
-        /* us.erase(num-1); */
-
-        /* for (auto e : us) */
-        /* { */
-        /*     std::cout << e <<","; */
-        /* } */
-        /* cout << endl; */
-
-        /* for (auto e : us) */
-        /* { */
-        /*     deleteAndEarn(e, us, currPts); */
-        /* } */
+        return maxEarn;
     }
 };
 

@@ -25,7 +25,7 @@ public:
 
     int rob(vector<int>& nums) {
         vector<int> mem(nums.size(), -1);
-        return max(rob(nums, mem, 0, 0), rob(nums, mem, 1, 1));
+        return max({rob(nums, mem, 0, 0), rob(nums, mem, 1, 1), rob(nums, mem, 2, 2)});
     }
 };
 

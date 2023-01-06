@@ -1,39 +1,38 @@
-#include <bits/stdc++.h>
+#include <vector>
+#include <iostream>
 
 using namespace std;
 
 class Solution {
 public:
-    int countCost(vector<int>& cost, unordered_map<int,int> m, int i, int total)
+    int minCostClimbingStairs(vector<int>& cost, vector<int>& tab, int i)
     {
-        if (i >= cost.size())
-            return total;
-        if (auto it = m.find(i);
-                 it != m.end()) {
-             if (it->second > total) {
-                m[i] = total;
-            }
+        if (i >= cost.size()) {
+            return 0;
         }
-        else {
-            m[i] = total;
+
+        if (tab[i]) {
+            return tab[i];
         }
-        return min(countCost(cost, m, i + 1, total+cost[i]),
-                   countCost(cost, m, i + 2, total+cost[i]));
+
+        tab[i] = min(cost[i] + minCostClimbingStairs(cost, tab, i + 1),
+                     cost[i] + minCostClimbingStairs(cost, tab, i + 2));
+
+        return tab[i];
     }
 
     int minCostClimbingStairs(vector<int>& cost)
     {
-        unordered_map<int, int> m;
-        m[0] = cost[0]; m[1] = cost[1];
-        return min(countCost(cost, m, 0, cost[0]),
-                   countCost(cost, m, 1, cost[1]));
+        vector<int> tab(cost.size());
+        return min(minCostClimbingStairs(cost, tab, 0), minCostClimbingStairs(cost, tab, 1));
     }
 };
 
 int main()
 {
 	Solution s;
-	vector<int> v = {1,100,1,1,1,100,1,1,100,1};
+	/* vector<int> v = {1,100,1,1,1,100,1,1,100,1}; */
+	vector<int> v = {10, 15, 20};
 	cout << s.minCostClimbingStairs(v) << endl;
 	return 0;
 }
